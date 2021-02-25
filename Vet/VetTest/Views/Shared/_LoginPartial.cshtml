@@ -1,0 +1,33 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+    @Html.AntiForgeryToken()
+
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            @if (User.IsInRole("client"))
+            {
+                @Html.ActionLink("My Panel", "Main", "Home", routeValues: null, htmlAttributes: new { title = "Manage" })
+            }
+            else if (User.IsInRole("worker"))
+            {
+                @Html.ActionLink("My Panel", "MainWorkers", "Home", routeValues: null, htmlAttributes: new { title = "Manage" })
+            }
+            else if (User.IsInRole("admin"))
+            {
+                @Html.ActionLink("My Panel", "MainAdmin", "Home", routeValues: null, htmlAttributes: new { title = "Manage" })
+            }
+        </li>
+        <li><a href="javascript:document.getElementById('logoutForm').submit()">Wyloguj</a></li>
+    </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Zarejestruj", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "nav-text" })</li>
+        <li>@Html.ActionLink("Zaloguj", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "nav-text" })</li>
+    </ul>
+}

@@ -1,0 +1,50 @@
+﻿@model VetTest.Models.Visit
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Visit</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Animal.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Animal.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MyUser.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MyUser.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Day)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Day)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Time)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.VisitID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

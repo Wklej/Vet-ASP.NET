@@ -1,0 +1,152 @@
+﻿@*@model IEnumerable<VetTest.Models.Visit>*@
+@model VetTest.Models.AddVisitModel
+
+<h1 class="display-5 mb-6 text-center">Kalendarz Wizyt</h1>
+
+@{ var visitVar = Model.Visits.FirstOrDefault();}
+
+<div class="jumbotron">
+    <table class="table bg-trans">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => visitVar.MyUser.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => visitVar.Animal.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => visitVar.Day)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => visitVar.Time)
+            </th>
+            <th>Actions</th>
+        </tr>
+
+        @foreach (var item in Model.Visits)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MyUser.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Animal.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Day)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Time)
+                </td>
+                <td>
+                    @Html.ActionLink(" ", null, null,
+                       new
+                       {
+                           href = "#editAnimal",
+                           @class = "glyphicon glyphicon-pencil",
+                           @onClick = "takeValues(" + item.VisitID + ",\"" + item.Animal.Name + "\"," +
+                           " " + item.Day + ",\"" + item.Time + "\")",
+                           data_toggle = "modal"
+                       }) |
+                    @Html.ActionLink(" ", null, null, new { id = item.VisitID }, new
+                    {
+                        href = "#deleteVisitModal",
+                        data_toggle = "modal",
+                   @onClick = "ConfirmDelete(" + item.VisitID + ")",
+                        @class = "glyphicon glyphicon-remove"
+                    })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+
+<!--Delete Modal HTML-->
+@using (Html.BeginForm("DeleteConfirmed", "Visits", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div id="deleteVisitModal" class="modal fade">
+        @Html.Hidden("VisitID")
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Visit</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete these Records?</p>
+                    <p class="text-warning"><small>This action cannot be undone.</small></p>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-danger" value="Delete">
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!--Edit Modal HTML-->
+@using (Html.BeginForm("Edit", "Visits", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div id="editAnimal" class="modal fade">
+        @Html.Hidden("ModelID")
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Visit</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Animal.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Animal.Name, new { htmlAttributes = new { @id = "ModelAnimalName", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Animal.Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Day, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Day, new { htmlAttributes = new { @id = "ModelDay", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Day, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Time, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Time, new { htmlAttributes = new { @id = "ModelTime", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Time, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-success" value="Update">
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section scripts{
+    <script>
+        var ConfirmDelete = function (VisitID) {
+            $("#VisitID").val(VisitID);
+        }
+
+        var takeValues = function (VisitID, AnimalName, Day, Time) {
+            $("#ModelAnimalName").val(AnimalName);
+            $("#ModelDay").val(Day);
+            $("#ModelTime").val(Time);
+            $("#ModelID").val(VisitID);
+            console.log(VisitID, AnimalName, Day, Time)
+        }
+    </script>
+}

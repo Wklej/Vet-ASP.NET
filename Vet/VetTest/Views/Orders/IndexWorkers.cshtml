@@ -1,0 +1,75 @@
+﻿@model VetTest.Models.AddOrderModel
+
+
+@{ var orderModel = Model.Orders.FirstOrDefault();}
+
+
+<h1 class="display-5 mb-6 text-center">Zamówienia</h1>
+
+@Html.ActionLink(" NEW ORDER", "Create", null,
+    new { href = "#addOrder", @class = "btn btn-primary glyphicon glyphicon-plus", data_toggle = "modal" })
+
+
+<div class="jumbotron">
+    <table class="table bg-trans">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => orderModel.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => orderModel.Amount)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.Orders)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+@using (Html.BeginForm("Create", "Orders", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div id="addOrder" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Order</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-success" value="Add">
+                </div>
+            </div>
+        </div>
+    </div>
+}

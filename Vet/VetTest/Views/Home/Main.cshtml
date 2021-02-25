@@ -1,0 +1,30 @@
+﻿@model VetTest.Models.MyUser
+
+
+<h1 style="text-align: center">Client Panel</h1>
+
+<div class="jumbotron">
+    <div class="container">
+        <div class="form-group">
+            <div class="form-group col-md-6">
+                <p>USER:</p>
+                <p>@User.Identity.Name</p>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.ActionLink("Booking", "Booking", "Visits", null,
+               new { @class = "jumbotron-small btn" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-group col-md-6">
+                @Html.ActionLink("Animals Manager", "IndexClient", "Animals",
+               new { Email = User.Identity.Name},
+               new { @class = "btn jumbotron-small" })
+            </div>
+            <div class="form-group col-md-6">
+                @Html.ActionLink("Visits Calendar", "IndexClient", "Visits", new { Email = User.Identity.Name },
+               new { @class = "btn jumbotron-small" })
+            </div>
+        </div>
+    </div>
+</div>

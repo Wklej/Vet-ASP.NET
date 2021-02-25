@@ -1,0 +1,199 @@
+﻿@*@model IEnumerable<VetTest.Models.Animal>
+*@
+
+@model VetTest.Models.AddAnimalModel
+
+
+@{ var animalModel = Model.Animals.FirstOrDefault();}
+
+<h1 class="display-5 mb-6 text-center">Zarejestrowane Zwierzęta</h1>
+
+
+@Html.ActionLink(" NEW ANIMAL", "Create", null,
+    new { href = "#addAnimal", @class = "btn btn-primary glyphicon glyphicon-plus", data_toggle = "modal" })
+
+<div class="jumbotron">
+    <table class="table bg-trans">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => animalModel.MyUser.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => animalModel.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => animalModel.Age)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => animalModel.Type)
+            </th>
+            <th>Actions</th>
+        </tr>
+
+        @foreach (var item in Model.Animals)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MyUser.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Age)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @Html.ActionLink(" ", null, null,
+                        new { href = "#editAnimal", @class = "glyphicon glyphicon-pencil",
+                            @onClick = "takeValues(\" " + item.Name + " \", "+ item.Age + ", "+ item.AnimalID+" ,\" " + item.Type +"\")",
+                            data_toggle = "modal" }) |
+                    @Html.ActionLink(" ", null, null, new { id = item.AnimalID }, new
+                    {
+                        href = "#deleteAnimalModal",
+                        data_toggle = "modal",
+                   @onClick = "ConfirmDelete(" + item.AnimalID + ")",
+                        @class = "glyphicon glyphicon-remove"
+                    })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+
+
+<!--Add Modal HTML-->
+@using (Html.BeginForm("Create", "Animals", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div id="addAnimal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Animal</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Age, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Age, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Type, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-success" value="Add">
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!--Delete Modal HTML-->
+@using (Html.BeginForm("DeleteConfirmed", "Animals", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div id="deleteAnimalModal" class="modal fade">
+        @Html.Hidden("AnimalID")
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Animal</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete these Records?</p>
+                    <p class="text-warning"><small>This action cannot be undone.</small></p>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-danger" value="Delete">
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!--Edit Modal HTML-->
+@using (Html.BeginForm("Edit", "Animals", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+<div id="editAnimal" class="modal fade">
+    @Html.Hidden("ModelID")
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Animal</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @id = "ModelName", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Age, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Age, new { htmlAttributes = new { @id = "ModelAge", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Type, new { htmlAttributes = new { @id = "ModelType", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                <input type="submit" class="btn btn-success" value="Update">
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+
+@section scripts{
+    <script>
+        var ConfirmDelete = function (AnimalID) {
+            $("#AnimalID").val(AnimalID);
+        }
+
+        var takeValues = function (Name, Age, AnimalID, Type) {
+            $("#ModelName").val(Name);
+            $("#ModelAge").val(Age);
+            $("#ModelType").val(Type);
+            $("#ModelID").val(AnimalID);
+            console.log(Name, Age, AnimalID, Type)
+        }
+    </script>
+}

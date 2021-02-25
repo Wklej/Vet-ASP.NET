@@ -1,0 +1,29 @@
+﻿@model VetTest.Models.MyUser
+
+
+<h1 style="text-align: center">Admin Panel</h1>
+
+<div class="jumbotron">
+    <div class="container">
+        <div class="form-group">
+            <div class="form-group col-md-6">
+                @Html.ActionLink("Users", "Index", "MyUsers", null,
+               new { @class = "btn jumbotron-small" })
+            </div>
+            <div class="form-group col-md-6">
+                @Html.ActionLink("Orders", "Index", "Orders", null,
+               new { @class = "jumbotron-small btn" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-group col-md-6">
+                @Html.ActionLink("Storage", "Index", "Supplies", null,
+               new { @class = "btn jumbotron-small" })
+            </div>
+            <div class="form-group col-md-6">
+                @Html.ActionLink("Visits Calendar", "Index", "Visits", null,
+               new { @class = "btn jumbotron-small" })
+            </div>
+        </div>
+    </div>
+</div>
